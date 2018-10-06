@@ -8,7 +8,7 @@ from skopt.space import Real
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import cross_val_score
 
-df = pd.read_csv('/Users/sunny.chopra/Downloads/AP_ICD10.tsv', sep='\t')
+df = pd.read_csv('AP_ICD10.tsv', sep='\t')
 # ['chf cmplnt', 'A/P', 'icd10encounterdiagcode', 'icd10encounterdiagdescr']
 
 df['target'] = df['icd10encounterdiagcode'].str.slice(0,3)
@@ -42,7 +42,7 @@ def optimize(x):
   scores = cross_val_score(clf, tf.toarray(), df_randomized['target'], cv=5, scoring='f1_macro')
   return -1 * scores.mean()
 
-res = gp_minimize(optimize, [['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'], ['l2', 'l1', 'elasticnet'], Real(0.001, 0.3)], n_calls=500, random_state=0)
+res = gp_minimize(optimize, [['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron'], ['l2', 'l1', 'elasticnet'], Real(0.001, 0.3)], n_calls=200, random_state=0)
 
 # Final model
 hyper_parameters = res.x
